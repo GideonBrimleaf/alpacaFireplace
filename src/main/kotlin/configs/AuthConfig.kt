@@ -1,6 +1,6 @@
-package __PACKAGE__.configs
+package com.alpaca.fireplace.configs
 
-import __PACKAGE__.entities.Users
+import com.alpaca.fireplace.entities.Users
 import dev.alpas.Environment
 import dev.alpas.auth.SessionAuthChannel
 import dev.alpas.auth.AuthConfig as BaseConfig

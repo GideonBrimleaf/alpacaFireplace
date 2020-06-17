@@ -1,6 +1,6 @@
-package __PACKAGE__
+package com.alpaca.fireplace
 
-import __PACKAGE__.controllers.WelcomeController
+import com.alpaca.fireplace.controllers.WelcomeController
 import dev.alpas.routing.RouteGroup
 import dev.alpas.routing.Router
 

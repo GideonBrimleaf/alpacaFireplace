@@ -1,4 +1,4 @@
-package __PACKAGE__.entities
+package com.alpaca.fireplace.entities
 
 import dev.alpas.auth.BaseUser
 import dev.alpas.auth.BaseUsersTable

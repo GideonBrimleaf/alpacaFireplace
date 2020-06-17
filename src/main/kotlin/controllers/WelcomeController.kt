@@ -1,4 +1,4 @@
-package __PACKAGE__.controllers
+package com.alpaca.fireplace.controllers
 
 import dev.alpas.http.HttpCall
 import dev.alpas.routing.Controller

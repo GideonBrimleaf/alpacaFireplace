@@ -1,6 +1,6 @@
-package __PACKAGE__.database.seeds
+package com.alpaca.fireplace.database.seeds
 
-import __PACKAGE__.database.factories.UserFactory
+import com.alpaca.fireplace.database.factories.UserFactory
 import dev.alpas.Application
 import dev.alpas.make
 import dev.alpas.ozone.Seeder

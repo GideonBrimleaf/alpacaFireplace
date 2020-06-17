@@ -1,4 +1,4 @@
-package __PACKAGE__.configs
+package com.alpaca.fireplace.configs
 
 import dev.alpas.Environment
 import dev.alpas.ozone.ConnectionConfig

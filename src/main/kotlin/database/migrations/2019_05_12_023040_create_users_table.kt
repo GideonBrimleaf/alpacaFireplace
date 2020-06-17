@@ -1,6 +1,6 @@
-package __PACKAGE__.database.migrations
+package com.alpaca.fireplace.database.migrations
 
-import __PACKAGE__.entities.Users
+import com.alpaca.fireplace.entities.Users
 import dev.alpas.auth.PasswordResetTokens
 import dev.alpas.ozone.migration.Migration
 

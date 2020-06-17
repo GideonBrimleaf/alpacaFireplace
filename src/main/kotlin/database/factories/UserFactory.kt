@@ -1,7 +1,7 @@
-package __PACKAGE__.database.factories
+package com.alpaca.fireplace.database.factories
 
-import __PACKAGE__.entities.User
-import __PACKAGE__.entities.Users
+import com.alpaca.fireplace.entities.User
+import com.alpaca.fireplace.entities.Users
 import dev.alpas.hashing.Hasher
 import dev.alpas.ozone.EntityFactory
 import dev.alpas.ozone.faker
