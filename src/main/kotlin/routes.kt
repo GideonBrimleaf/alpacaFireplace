@@ -1,5 +1,6 @@
 package com.alpaca.fireplace
 
+import com.alpaca.fireplace.controllers.ProjectController
 import com.alpaca.fireplace.controllers.WelcomeController
 import dev.alpas.auth.authRoutes
 import dev.alpas.routing.RouteGroup
@@ -19,6 +20,7 @@ fun Router.addRoutes() = apply {
 private fun RouteGroup.webRoutesGroup() {
     get("/", WelcomeController::index).name("welcome")
     // register more web routes here
+    get("/projects", ProjectController::index).name("projects.list")
 }
 
 private fun Router.apiRoutes() {
