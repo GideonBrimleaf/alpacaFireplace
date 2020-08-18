@@ -1,6 +1,7 @@
 package com.alpaca.fireplace
 
 import com.alpaca.fireplace.controllers.WelcomeController
+import dev.alpas.auth.authRoutes
 import dev.alpas.routing.RouteGroup
 import dev.alpas.routing.Router
 
@@ -8,6 +9,8 @@ import dev.alpas.routing.Router
 fun Router.addRoutes() = apply {
     group {
         webRoutesGroup()
+        authRoutes()
+//        authRoutes(requireEmailVerification = false)
     }.middlewareGroup("web")
 
     apiRoutes()
