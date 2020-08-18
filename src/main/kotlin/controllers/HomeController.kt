@@ -7,7 +7,7 @@ import dev.alpas.routing.ControllerMiddleware
 
 class HomeController : Controller() {
 //    Comment out below to disable email verification
-    override fun middleware(call: HttpCall) = listOf(ControllerMiddleware(VerifiedEmailOnlyMiddleware::class))
+//    override fun middleware(call: HttpCall) = listOf(ControllerMiddleware(VerifiedEmailOnlyMiddleware::class))
 
     fun index(call: HttpCall) {
         call.render("home")

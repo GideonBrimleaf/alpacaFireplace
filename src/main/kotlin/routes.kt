@@ -10,8 +10,8 @@ import dev.alpas.routing.Router
 fun Router.addRoutes() = apply {
     group {
         webRoutesGroup()
-        authRoutes()
-//        authRoutes(requireEmailVerification = false)
+//        authRoutes()
+        authRoutes(requireEmailVerification = false)
     }.middlewareGroup("web")
 
     apiRoutes()

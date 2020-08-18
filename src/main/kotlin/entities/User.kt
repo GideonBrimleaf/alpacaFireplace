@@ -8,8 +8,8 @@ import dev.alpas.ozone.OzoneEntity
 interface User : BaseUser<User> {
     // https://alpas.dev/docs/email-verification
     override val mustVerifyEmail
-        get() = true
-//        get() = false
+//        get() = true
+        get() = false
 
     companion object : OzoneEntity.Of<User>()
 }
