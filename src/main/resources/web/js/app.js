@@ -2484,7 +2484,12 @@ function normalizeComponent (
     options._ssrRegister = hook
   } else if (injectStyles) {
     hook = shadowMode
-      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
+      ? function () {
+        injectStyles.call(
+          this,
+          (options.functional ? this.parent : this).$root.$options.shadowRoot
+        )
+      }
       : injectStyles
   }
 
@@ -2493,7 +2498,7 @@ function normalizeComponent (
       // for template-only hot-reload because in that case the render fn doesn't
       // go through the normalizer
       options._injectStyles = hook
-      // register for functioal component in vue file
+      // register for functional component in vue file
       var originalRender = options.render
       options.render = function renderWithStyleInjection (h, context) {
         hook.call(context)
@@ -14645,8 +14650,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/ashokgelal/Projects/alpas-starter/src/main/resources/js/app.js */"./src/main/resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/ashokgelal/Projects/alpas-starter/src/main/resources/css/app.less */"./src/main/resources/css/app.less");
+__webpack_require__(/*! /Users/user/Dev/alpacaFireplace/src/main/resources/js/app.js */"./src/main/resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/user/Dev/alpacaFireplace/src/main/resources/css/app.less */"./src/main/resources/css/app.less");
 
 
 /***/ })
