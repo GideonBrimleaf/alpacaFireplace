@@ -11,7 +11,7 @@ fun Router.addRoutes() = apply {
     group {
         webRoutesGroup()
 //        authRoutes()
-        authRoutes(requireEmailVerification = false)
+        authRoutes(requireEmailVerification = false, addHomeRoute = false)
     }.middlewareGroup("web")
 
     apiRoutes()
@@ -20,9 +20,16 @@ fun Router.addRoutes() = apply {
 private fun RouteGroup.webRoutesGroup() {
     get("/", WelcomeController::index).name("welcome")
     // register more web routes here
-    get("/projects", ProjectController::index).name("projects.list").mustBeAuthenticated()
-    get("/projects/create", ProjectController::create).name("projects.create").mustBeAuthenticated()
-    post("/projects", ProjectController::store).name("projects.store").mustBeAuthenticated()
+    group("/projects") {
+        addProjectRoutes()
+    }.name("projects").mustBeAuthenticated()
+}
+
+private fun RouteGroup.addProjectRoutes(){
+    get("/", ProjectController::index).name("list")
+    get("/create", ProjectController::create).name("create")
+    post("/", ProjectController::store).name("store")
+    delete("/", ProjectController::delete).name("delete")
 }
 
 private fun Router.apiRoutes() {
