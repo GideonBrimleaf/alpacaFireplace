@@ -1,0 +1,22 @@
+package com.alpaca.fireplace.guards
+
+import com.alpaca.fireplace.entities.Task
+import com.alpaca.fireplace.entities.Tasks
+import dev.alpas.ozone.create
+import dev.alpas.validation.JsonField
+import dev.alpas.validation.ValidationGuard
+import dev.alpas.validation.Rule
+import dev.alpas.validation.required
+
+class CreateTasksGuard : ValidationGuard() {
+    override fun rules(): Map<String, Iterable<Rule>> {
+          return mapOf("body" to listOf(JsonField(required())))
+    }
+
+    fun commit() : Task {
+        return Tasks.create {
+            it.body to call.jsonBody?.get("body")
+            it.projectId to call.longParam("project")
+        }
+    }
+}

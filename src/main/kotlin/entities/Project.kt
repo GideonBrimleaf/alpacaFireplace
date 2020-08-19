@@ -12,6 +12,7 @@ interface Project : OzoneEntity<Project> {
     var description: String?
     var notes:String?
     var owner:User
+    val tasks get() = hasMany(Tasks)
     var createdAt: Instant?
     var updatedAt: Instant?
 
