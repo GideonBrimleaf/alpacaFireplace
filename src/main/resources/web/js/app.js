@@ -1954,6 +1954,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -1975,7 +1985,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         body: '',
         completed: false
       }),
-      tasks: this.initialTasks || []
+      tasks: this.initialTasks || [],
+      editedTask: null,
+      beforeEditCache: null
     };
   },
   directives: {
@@ -2019,7 +2031,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    removeTask: function removeTask(task) {
+    editTask: function editTask(task) {
+      if (task.completed) {
+        return;
+      }
+
+      this.beforeEditCache = task.body;
+      this.editedTask = task;
+    },
+    doneEdit: function doneEdit(task) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
@@ -2027,20 +2047,94 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return _this2.form["delete"]("/projects/".concat(_this2.projectId, "/tasks/").concat(task.id));
+                if (_this2.editedTask) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return");
 
               case 2:
-                _this2.tasks = _this2.tasks.filter(function (taskInList) {
-                  return taskInList.id !== task.id;
-                });
+                _this2.editedTask = null;
+                _this2.form.body = task.body = task.body.trim();
 
-              case 3:
+                if (task.body) {
+                  _context2.next = 9;
+                  break;
+                }
+
+                _context2.next = 7;
+                return _this2.removeTask(task);
+
+              case 7:
+                _context2.next = 12;
+                break;
+
+              case 9:
+                _context2.next = 11;
+                return _this2.form.patch("/projects/".concat(_this2.projectId, "/tasks/").concat(task.id));
+
+              case 11:
+                _this2.form.reset();
+
+              case 12:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
+      }))();
+    },
+    cancelEdit: function cancelEdit(task) {
+      this.editedTask = null;
+      task.body = this.beforeEditCache;
+    },
+    removeTask: function removeTask(task) {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return _this3.form["delete"]("/projects/".concat(_this3.projectId, "/tasks/").concat(task.id));
+
+              case 2:
+                _this3.tasks = _this3.tasks.filter(function (t) {
+                  return t.id !== task.id;
+                });
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    updateTaskStatus: function updateTaskStatus(task) {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.form.body = task.body = task.body.trim();
+                _this4.form.completed = task.completed;
+                _context4.next = 4;
+                return _this4.form.patch("/projects/".concat(_this4.projectId, "/tasks/").concat(task.id));
+
+              case 4:
+                _this4.form.reset();
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
       }))();
     }
   }
@@ -3940,33 +4034,152 @@ var render = function() {
       "ul",
       { staticClass: "task-list max-w-4xl" },
       _vm._l(_vm.tasks, function(task) {
-        return _c("li", { key: task.id, staticClass: "py-1 list-disc" }, [
-          _c("div", { staticClass: "view flex items-center" }, [
-            _c(
-              "label",
-              {
-                staticClass: "text-lg font-light mx-6 flex-1 py-2 text-gray-700"
-              },
-              [
-                _vm._v(
-                  "\n                    " +
-                    _vm._s(task.body) +
-                    "\n                "
-                )
-              ]
-            ),
+        return _c(
+          "li",
+          {
+            key: task.id,
+            staticClass: "py-1",
+            class: {
+              completed: task.completed,
+              editing: task === _vm.editedTask
+            }
+          },
+          [
+            _c("div", { staticClass: "view flex items-center" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: task.completed,
+                    expression: "task.completed"
+                  }
+                ],
+                staticClass: "form-checkbox text-green-500 h-6 w-6",
+                attrs: { type: "checkbox" },
+                domProps: {
+                  checked: Array.isArray(task.completed)
+                    ? _vm._i(task.completed, null) > -1
+                    : task.completed
+                },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$a = task.completed,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(task, "completed", $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              task,
+                              "completed",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
+                        }
+                      } else {
+                        _vm.$set(task, "completed", $$c)
+                      }
+                    },
+                    function($event) {
+                      return _vm.updateTaskStatus(task)
+                    }
+                  ]
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "text-lg font-light mx-6 flex-1 py-2 text-gray-700",
+                  on: {
+                    dblclick: function($event) {
+                      return _vm.editTask(task)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(task.body) +
+                      "\n                "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("button", {
+                staticClass:
+                  "destroy text-red-500 hover:text-red-700 hidden w-10 text-2xl",
+                on: {
+                  click: function($event) {
+                    return _vm.removeTask(task)
+                  }
+                }
+              })
+            ]),
             _vm._v(" "),
-            _c("button", {
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: task.body,
+                  expression: "task.body"
+                },
+                {
+                  name: "task-focus",
+                  rawName: "v-task-focus",
+                  value: task === _vm.editedTask,
+                  expression: "task === editedTask"
+                }
+              ],
               staticClass:
-                "destroy text-red-500 hover:text-red-700 hidden w-10 text-2xl",
+                "edit appearance-none bg-gray-300 border border-gray-300 border-white focus:outline-none leading-tight px-3 py-3 rounded text-gray-700 text-lg w-fulll",
+              attrs: { type: "text" },
+              domProps: { value: task.body },
               on: {
-                click: function($event) {
-                  return _vm.removeTask(task)
+                keyup: [
+                  function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.doneEdit(task)
+                  },
+                  function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "esc", 27, $event.key, [
+                        "Esc",
+                        "Escape"
+                      ])
+                    ) {
+                      return null
+                    }
+                    return _vm.cancelEdit(task)
+                  }
+                ],
+                blur: function($event) {
+                  return _vm.doneEdit(task)
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(task, "body", $event.target.value)
                 }
               }
             })
-          ])
-        ])
+          ]
+        )
       }),
       0
     ),
@@ -3975,6 +4188,7 @@ var render = function() {
       _c(
         "form",
         {
+          class: { hidden: _vm.editedTask !== null },
           on: {
             submit: function($event) {
               $event.preventDefault()
