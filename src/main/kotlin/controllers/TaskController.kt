@@ -1,8 +1,12 @@
 package com.alpaca.fireplace.controllers
 
+import com.alpaca.fireplace.entities.Tasks
 import com.alpaca.fireplace.guards.CreateTasksGuard
 import dev.alpas.http.HttpCall
+import dev.alpas.orAbort
 import dev.alpas.routing.Controller
+import me.liuwj.ktorm.dsl.delete
+import me.liuwj.ktorm.dsl.eq
 
 class TaskController : Controller() {
     fun store(call: HttpCall) {
@@ -10,5 +14,11 @@ class TaskController : Controller() {
             val task = commit()
             call.replyAsJson(task)
         }
+    }
+
+    fun delete(call:HttpCall) {
+        val taskId = call.longParam("id").orAbort()
+        Tasks.delete { it.id eq taskId }
+        call.acknowledge()
     }
 }
