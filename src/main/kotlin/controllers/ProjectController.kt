@@ -33,7 +33,7 @@ class ProjectController : Controller() {
     fun delete(call:HttpCall) {
         val id = call.longParam("id").orAbort()
         Projects.delete {it.id eq id}
-        flash("success", "Successfully delete project")
+        flash("success", "Successfully deleted project")
         call.redirect().back()
     }
 }
