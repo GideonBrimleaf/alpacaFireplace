@@ -2,6 +2,7 @@ package com.alpaca.fireplace.controllers
 
 import com.alpaca.fireplace.entities.Projects
 import com.alpaca.fireplace.entities.User
+import com.alpaca.fireplace.guards.CreateProjectGuard
 import dev.alpas.http.HttpCall
 import dev.alpas.orAbort
 import dev.alpas.ozone.create
@@ -22,14 +23,10 @@ class ProjectController : Controller() {
     }
 
     fun store(call: HttpCall) {
-        //toDo: validateInputs
-        val project = Projects.create {
-            it.title to call.param("title")
-            it.description to call.param("description")
-            it.ownerId to call.user.id
+        call.validateUsing(CreateProjectGuard::class) {
+            val project = commit()
+            flash("success", "Successfully added project ${project.title}")
         }
-
-        flash("success", "Successfully added project ${project.title}")
         call.redirect().toRouteNamed("projects.list")
     }
 
