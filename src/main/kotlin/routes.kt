@@ -12,7 +12,7 @@ fun Router.addRoutes() = apply {
     group {
         webRoutesGroup()
 //        authRoutes()
-        authRoutes(requireEmailVerification = false, addHomeRoute = false)
+        authRoutes(requireEmailVerification = false)
     }.middlewareGroup("web")
 
     apiRoutes()
