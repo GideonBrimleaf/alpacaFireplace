@@ -1,5 +1,8 @@
 package com.alpaca.fireplace.controllers
 
+import com.alpaca.fireplace.entities.Activities
+import com.alpaca.fireplace.entities.Activities.payload
+import com.alpaca.fireplace.entities.Project
 import com.alpaca.fireplace.entities.Projects
 import com.alpaca.fireplace.entities.User
 import com.alpaca.fireplace.guards.CreateProjectGuard
@@ -10,6 +13,7 @@ import dev.alpas.ozone.findOrFail
 import dev.alpas.routing.Controller
 import me.liuwj.ktorm.dsl.delete
 import me.liuwj.ktorm.dsl.eq
+import me.liuwj.ktorm.dsl.insert
 import me.liuwj.ktorm.entity.findAll
 
 class ProjectController : Controller() {
@@ -26,9 +30,22 @@ class ProjectController : Controller() {
     fun store(call: HttpCall) {
         call.validateUsing(CreateProjectGuard::class) {
             val project = commit()
+            logCreateProjectActivity(project, mapOf("action" to "created project", "title" to project.title))
             flash("success", "Successfully added project ${project.title}")
         }
         call.redirect().toRouteNamed("projects.list")
+    }
+
+    private fun logCreateProjectActivity(project: Project, payload: Map<String, Any?>) {
+        val now = call.nowInCurrentTimezone().toInstant()
+        val user = caller<User>()
+        Activities.insert {
+            it.payload to payload
+            it.projectId to project.id
+            it.userId to user.id
+            it.createdAt to now
+            it.updatedAt to now
+        }
     }
 
     fun delete(call:HttpCall) {
