@@ -1,6 +1,7 @@
 package com.alpaca.fireplace
 
 import com.alpaca.fireplace.controllers.ProjectController
+import com.alpaca.fireplace.controllers.ProjectMembershipController
 import com.alpaca.fireplace.controllers.TaskController
 import com.alpaca.fireplace.controllers.WelcomeController
 import dev.alpas.auth.authRoutes
@@ -24,6 +25,7 @@ private fun RouteGroup.webRoutesGroup() {
     group("/projects") {
         addProjectRoutes()
         addTaskRoutes()
+        addProjectMembershipRoutes()
     }.name("projects").mustBeAuthenticated()
 }
 
@@ -41,6 +43,12 @@ private fun RouteGroup.addTaskRoutes() {
         delete("<id>", TaskController::delete).name("delete")
         patch("<id>", TaskController::update).name("update")
     }.name("tasks")
+}
+
+private fun RouteGroup.addProjectMembershipRoutes() {
+    group("<project>/membership") {
+        post(ProjectMembershipController::class, "add").name("add")
+    }.name("membership")
 }
 
 private fun Router.apiRoutes() {
