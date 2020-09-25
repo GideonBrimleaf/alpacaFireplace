@@ -29,6 +29,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     implementation "dev.alpas:alpas:$alpas_version"
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     testImplementation "dev.alpas:pulsar:$alpas_version"
     // Prepend the latest SHA to try out the latest Alpas version
 //    implementation 'com.github.alpas:alpas:4b0d0f'

@@ -14,6 +14,7 @@ interface User : BaseUser<User> {
         get() = false
 
     val projects get() = Projects.findList { it.ownerId eq id }
+    val projectMembership get() = ProjectMemberships.findList { it.userId eq id }.map{ it.project }
 
     companion object : OzoneEntity.Of<User>()
 }
